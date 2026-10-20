@@ -15,8 +15,19 @@ d = tinytuya.BulbDevice(cfg["id"], cfg["ip"], cfg["key"], version=cfg["version"]
 lock = threading.Lock()
 rainbow_on = threading.Event()
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+try:  # own taskbar identity so Windows shows our icon instead of Python's
+    import ctypes
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("shed.leds.gui")
+except Exception:
+    pass
+
 root = tk.Tk()
 root.title("Shed LEDs")
+try:
+    root.iconbitmap(os.path.join(HERE, "shed_leds.ico"))
+except tk.TclError:
+    pass
 root.resizable(False, False)
 status = tk.StringVar(value="Ready")
 
